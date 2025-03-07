@@ -1,20 +1,15 @@
 import { Link } from "react-router-dom";
 
-const App = () => {
+function App() {
   return (
-    <nav className="p-4 bg-gray-800 text-white flex justify-between">
-      <h1 className="text-xl font-bold">E-Commerce</h1>
-      <div>
-        <Link to="/" className="mr-4 hover:underline">
-          Home
-        </Link>
-        <Link to="/login" className="hover:underline">
-          Login
-        </Link>
-      </div>
-    </nav>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h1 className="text-3xl font-bold">Welcome to E-Commerce</h1>
+      <Link to="/register" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+        Go to Register
+      </Link>
+    </div>
   );
-};
+}
 
 export default App;
 
