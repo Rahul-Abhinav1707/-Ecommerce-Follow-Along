@@ -1,10 +1,9 @@
 import User from "../Models/userModel.js";
-import bcrypt from "bcryptjs";
 
 // Get all users
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find().select("-password"); // Exclude password when retrieving users
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -23,19 +22,10 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Create user (password will be hashed before saving)
+    const user = await User.create({ name, email, password, profileImage });
 
-    // Create user
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      profileImage,
-    });
-
-    res.status(201).json({ message: "User created successfully", user });
+    res.status(201).json({ message: "User registered successfully", user: { name, email, profileImage } });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
