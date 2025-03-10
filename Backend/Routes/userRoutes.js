@@ -1,10 +1,10 @@
 import express from "express";
-import { getUsers, createUser } from "../Controllers/userController.js";
-import upload from "../Middleware/uploadMiddleware.js";
+import { loginUser, createUser, getUsers } from "../Controllers/userController.js";
 
 const router = express.Router();
 
-router.get("/", getUsers);
-router.post("/register", upload.single("profileImage"), createUser);
+router.post("/login", loginUser); // Login route
+router.post("/register", createUser); // Register route
+router.get("/", getUsers); // Get all users
 
 export default router;

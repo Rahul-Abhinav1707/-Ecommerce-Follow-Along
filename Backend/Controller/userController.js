@@ -1,31 +1,24 @@
+import bcrypt from "bcryptjs";
 import User from "../Models/userModel.js";
 
-// Get all users
-export const getUsers = async (req, res) => {
+// User Login
+export const loginUser = async (req, res) => {
   try {
-    const users = await User.find().select("-password"); // Exclude password when retrieving users
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-// Create a new user
-export const createUser = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const profileImage = req.file ? req.file.path : null;
+    const { email, password } = req.body;
 
     // Check if user exists
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // Create user (password will be hashed before saving)
-    const user = await User.create({ name, email, password, profileImage });
+    // Compare entered password with stored hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
 
-    res.status(201).json({ message: "User registered successfully", user: { name, email, profileImage } });
+    res.status(200).json({ message: "Login successful", user: { name: user.name, email: user.email } });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
