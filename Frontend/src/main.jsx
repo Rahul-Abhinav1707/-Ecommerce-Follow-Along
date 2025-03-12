@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 import Register from "./pages/Register";
-import App from "./App";
+import ProductUpload from "./pages/ProductUpload";
 
 const Main = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/upload" element={<ProductUpload />} />
       </Routes>
     </Router>
   );
